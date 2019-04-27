@@ -52,4 +52,8 @@ public class FoodItem {
                 ", expiryDate=" + expiryDate +
                 '}';
     }
+
+    public boolean equals(String foodName) {
+        return this.getName().equals(foodName);
+    }
 }

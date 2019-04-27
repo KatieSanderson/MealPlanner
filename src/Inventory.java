@@ -11,6 +11,7 @@ public class Inventory {
 
     public void addToInventory(FoodItem foodItem) {
         currentInventory.get(foodItem.getFoodType()).add(foodItem);
+        System.out.println("Adding " + foodItem.getName() + " to inventory");
     }
 
     public void removeFromInventory(FoodItem foodItem) {
@@ -31,6 +32,12 @@ public class Inventory {
 
     public FoodItem selectFoodItem(FoodType foodType) {
         List<FoodItem> foodItems = currentInventory.get(foodType);
-        return foodItems.get(random.nextInt(foodItems.size()));
+        int size = foodItems.size();
+        if (size < 1) {
+            System.out.println("No " + foodType.toString().toLowerCase() + "s in inventory. Not added to lunch");
+            return null;
+        } else {
+            return foodItems.get(random.nextInt(size));
+        }
     }
 }

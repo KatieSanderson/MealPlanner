@@ -14,6 +14,8 @@ public class Main {
         FoodItem beef = new FoodItem("BEEF", FoodType.MAIN, "2019-05-31");
         FoodItem pork = new FoodItem("PORK", FoodType.MAIN, "2019-05-31");
         FoodItem tofu = new FoodItem("TOFU", FoodType.MAIN, "2019-05-31");
+        FoodItem peas = new FoodItem("PEAS", FoodType.VEGETABLE, "2019-05-31");
+        FoodItem carrots = new FoodItem("CARROTS", FoodType.VEGETABLE, "2019-05-31");
 
         Inventory inventory = new Inventory();
         inventory.addToInventory(potatoes);
@@ -26,6 +28,9 @@ public class Main {
         inventory.addToInventory(tofu);
 
         Lunch lunch = new Lunch(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
+        lunch.selectLunch(scanner);
+
+        lunch = new Lunch(inventory);
         lunch.selectLunch(scanner);
 
 //        System.out.println(potatoes.getFoodItemOverview());

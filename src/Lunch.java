@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,9 +18,18 @@ public class Lunch {
         // Standard lunch: protein, vegetable, starch
     }
 
+    Lunch(Inventory inventory) {
+        this.inventory = inventory;
+        this.foodTypes = Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.VEGETABLE);
+        selectedLunch = new ArrayList<>();
+    }
+
     void selectLunch(Scanner scanner) {
         for (FoodType foodType : foodTypes) {
-            selectedLunch.add(inventory.selectFoodItem(foodType));
+            FoodItem addedFoodItem = inventory.selectFoodItem(foodType);
+            if (addedFoodItem != null) {
+                selectedLunch.add(addedFoodItem);
+            }
         }
         printLunch();
         acceptLunch(scanner);
@@ -40,26 +50,39 @@ public class Lunch {
 
     private void acceptLunch(Scanner scanner) {
         System.out.println("Please choose an option: \n" +
-                "0 - Accept this lunch; will deduct all selected lunch items from inventory \n" +
-                "1 - Select a new lunch; will re-make a selected lunch \n" +
-                "2 - Modify the current lunch \n" +
-                "3 - Exit program");
-        int response = scanner.nextInt();
+                "1 - Accept this lunch; will deduct all selected lunch items from inventory \n" +
+                "2 - Select a new lunch with same food types; will re-make a selected lunch \n" +
+                "3 - Modify the current lunch; will re-make keeping items indicated in this prompt \n" +
+                "4 - Exit program");
+        int response = Integer.parseInt(scanner.nextLine());
         switch (response) {
-            case 0:
+            case 1:
                 for (FoodItem foodItem : selectedLunch) {
                     inventory.removeFromInventory(foodItem);
                 }
                 System.out.println("Enjoy your lunch!");
                 break;
-            case 1:
+            case 2:
                 clearLunch();
                 selectLunch(scanner);
                 break;
-            case 2:
-                // User input for modifications of "Remove X, Y, Z" or "Add X, Y, Z"
-                break;
             case 3:
+                // User input for modifications of "Keep X, Y, Z"
+                System.out.println("What items would you like to keep? These will be in the next lunch \n" +
+                        "Input should be comma separated \"" +
+                        selectedLunch.get(0).getName() + ", " +
+                        selectedLunch.get(selectedLunch.size() - 1).getName() + "\" for example");
+                String[] keepItems = scanner.nextLine().split(",\\w+");
+                for (String keepItem : keepItems) {
+                    for (FoodItem foodItem : selectedLunch) {
+                        if (foodItem.equals(keepItem)) {
+
+                        }
+                    }
+                }
+                System.out.println(Arrays.toString(keepItems));
+                break;
+            case 4:
                 return;
             default:
                 System.out.println("Invalid input. Please select from indicated options.");
