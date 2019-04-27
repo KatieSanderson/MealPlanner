@@ -1,9 +1,11 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class Main {
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         FoodItem potatoes = new FoodItem("POTATOES", FoodType.STARCH, "2019-05-31");
         FoodItem mashed_potatoes = new FoodItem("MASHED POTATOES", FoodType.STARCH, "2019-05-31");
         FoodItem rice = new FoodItem("RICE", FoodType.STARCH, "2019-05-31");
@@ -24,9 +26,8 @@ public class Main {
         inventory.addToInventory(tofu);
 
         Lunch lunch = new Lunch(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
-        lunch.selectLunch();
-        lunch.printLunch();
-        // array, list, string?
+        lunch.selectLunch(scanner);
+
 //        System.out.println(potatoes.getFoodItemOverview());
 //        inventory.printInventory();
     }

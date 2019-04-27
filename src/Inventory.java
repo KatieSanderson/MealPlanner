@@ -10,17 +10,12 @@ public class Inventory {
     }
 
     public void addToInventory(FoodItem foodItem) {
-//        FoodType foodType = foodItem.getFoodType();
-//        if (currentInventory.get(foodType) == null) {
-//            currentInventory.put(foodType, new ArrayList<>());
-//        }
         currentInventory.get(foodItem.getFoodType()).add(foodItem);
-        System.out.println("Adding " + foodItem.getName() + " to inventory");
     }
 
     public void removeFromInventory(FoodItem foodItem) {
-//        currentInventory.remove(foodItem);
-        System.out.println("Removing " + foodItem.getName() + " to inventory");
+        currentInventory.get(foodItem.getFoodType()).remove(foodItem);
+        System.out.println("Removing " + foodItem.getName() + " from inventory");
     }
 
     public void printInventory() {
