@@ -30,14 +30,13 @@ public class Inventory {
         System.out.println(sb.toString());
     }
 
-    public FoodItem selectFoodItem(FoodType foodType) {
+    public Optional<FoodItem> selectFoodItem(FoodType foodType) {
         List<FoodItem> foodItems = currentInventory.get(foodType);
-        int size = foodItems.size();
-        if (size < 1) {
+        if (foodItems.isEmpty()) {
             System.out.println("No " + foodType.toString().toLowerCase() + "s in inventory. Not added to lunch");
-            return null;
+            return Optional.empty();
         } else {
-            return foodItems.get(random.nextInt(size));
+            return Optional.of(foodItems.get(random.nextInt(foodItems.size())));
         }
     }
 }

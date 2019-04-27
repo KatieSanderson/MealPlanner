@@ -30,6 +30,7 @@ public class Main {
         Lunch lunch = new Lunch(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
         lunch.selectLunch(scanner);
 
+
         lunch = new Lunch(inventory);
         lunch.selectLunch(scanner);
 
