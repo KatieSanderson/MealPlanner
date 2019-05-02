@@ -38,26 +38,29 @@ public class Lunch {
                     clearLunch();
                     break;
                 case MODIFY:
-                    // User input for modifications of "Keep X, Y, Z"
-                    //TODO make its own method
-                    System.out.println("What items would you like to keep? These will be in the next lunch \n" +
-                            "Input should be comma separated \"" +
-                            selectedLunch.get(0).getName() + ", " +
-                            selectedLunch.get(selectedLunch.size() - 1).getName() + "\" for example");
-                    String[] keepItems = scanner.nextLine().split(",\\w+");
-                    for (String keepItem : keepItems) {
-                        for (FoodItem foodItem : selectedLunch) {
-                            if (foodItem.equals(keepItem)) {
-
-                            }
-                        }
-                    }
-                    System.out.println(Arrays.toString(keepItems));
+                    modifyLunch(scanner);
                     return;
                 case EXIT:
                     return;
             }
         }
+    }
+
+    private void modifyLunch(Scanner scanner) {
+        // User input for modifications of "Keep X, Y, Z"
+        System.out.println("What items would you like to keep? These will be in the next lunch \n" +
+                "Input should be comma separated \"" +
+                selectedLunch.get(0).getName() + ", " +
+                selectedLunch.get(selectedLunch.size() - 1).getName() + "\" for example");
+        String[] keepItems = scanner.nextLine().split(",\\w+");
+        for (String keepItem : keepItems) {
+            for (FoodItem foodItem : selectedLunch) {
+                if (foodItem.equals(keepItem)) {
+
+                }
+            }
+        }
+        System.out.println(Arrays.toString(keepItems));
     }
 
     private void printLunch(List<FoodItem> lunch) {
@@ -84,6 +87,8 @@ public class Lunch {
         private static final Map<Integer, LunchResponse> MAP = new HashMap<>();
 
         static {
+            // Initializes a map of LunchResponse's options and codes
+            // Used to map user input (code) to LunchResponse enum
             EnumSet.allOf(LunchResponse.class).forEach(lunchResponse -> MAP.put(lunchResponse.code, lunchResponse));
         }
 
@@ -94,6 +99,7 @@ public class Lunch {
         }
 
         private static LunchResponse getLunchResponse(int responseCode) {
+            // Returns LunchResponse from indicated code or throws exception (should be caught in caller) for illegal argument (no LunchResponse exists for indicated code)
             if (MAP.containsKey(responseCode)) {
                 return MAP.get(responseCode);
             } else {
