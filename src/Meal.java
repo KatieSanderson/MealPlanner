@@ -26,42 +26,11 @@ public class Meal {
             }
             printMeal();
             MealResponse response = getUserInput(scanner);
-            switch (response) {
-                case ACCEPT:
-                    //Accept
-                    for (FoodItem foodItem : selectedMeal) {
-                        inventory.removeFromInventory(foodItem);
-                    }
-                    System.out.println("Enjoy your meal!");
-                    return;
-                case SELECT:
-                    clearMeal();
-                    break;
-                case MODIFY:
-                    modifyMeal(scanner);
-                    return;
-                case EXIT:
-                    return;
-            }
+            response.execute(this, scanner);
         }
     }
 
-    private void modifyMeal(Scanner scanner) {
-        // User input for modifications of "Keep X, Y, Z"
-        System.out.println("What items would you like to keep? These will be in the next meal \n" +
-                "Input should be comma separated \"" +
-                selectedMeal.get(0).getName() + ", " +
-                selectedMeal.get(selectedMeal.size() - 1).getName() + "\" for example");
-        String[] keepItems = scanner.nextLine().split(",\\w+");
-        for (String keepItem : keepItems) {
-            for (FoodItem foodItem : selectedMeal) {
-                if (foodItem.equals(keepItem)) {
 
-                }
-            }
-        }
-        System.out.println(Arrays.toString(keepItems));
-    }
 
     private void printMeal(List<FoodItem> meal) {
         StringBuilder sb = new StringBuilder();
@@ -77,14 +46,48 @@ public class Meal {
     }
 
     private enum MealResponse {
-        ACCEPT(1, "Accept this meal; will deduct all selected meal items from inventory"),
-        SELECT(2, "Select a new meal with same food types; will re-make a selected meal"),
-        MODIFY(3, "Modify the current meal; will re-make keeping items indicated in this prompt"),
-        EXIT(4, "Exit program");
+        ACCEPT(1, "Accept this meal; will deduct all selected meal items from inventory") {
+            @Override
+            public void execute(Meal meal, Scanner scanner) {
+                for (FoodItem foodItem : meal.selectedMeal) {
+                    meal.inventory.removeFromInventory(foodItem);
+                }
+            }
+        },
+        SELECT(2, "Select a new meal with same food types; will re-make a selected meal") {
+            @Override
+            public void execute(Meal meal, Scanner scanner) {
+                meal.selectedMeal.clear();
+            }
+        },
+//        MODIFY(3, "Modify the current meal; will re-make keeping items indicated in this prompt") {
+//            @Override
+//            public void execute(Meal meal, Scanner scanner) {
+//                // User input for modifications of "Keep X, Y, Z"
+//                System.out.println("What items would you like to keep? These will be in the next meal \n" +
+//                        "Input should be comma separated \"" +
+//                        meal.selectedMeal.get(0).getName() + ", " +
+//                        meal.selectedMeal.get(meal.selectedMeal.size() - 1).getName() + "\" for example");
+//                Set<String> keepSet = Set.of(scanner.nextLine().split(",\\w+"));
+//                for (String keepItem : keepItems) {
+//                    for (FoodItem foodItem : meal.selectedMeal) {
+//                        if (foodItem.equals(keepItem)) {
+//
+//                        }
+//                    }
+//                }
+//            }
+//        },
+        EXIT(4, "Exit program") {
+            @Override
+            public void execute(Meal meal, Scanner scanner) {}
+        };
 
         private final int code;
         private final String description;
         private static final Map<Integer, MealResponse> MAP = new HashMap<>();
+
+        public abstract void execute(Meal meal, Scanner scanner);
 
         static {
             // Initializes a map of MealResponse's options and codes
