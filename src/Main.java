@@ -27,12 +27,12 @@ public class Main {
         inventory.addToInventory(pork);
         inventory.addToInventory(tofu);
 
-        Lunch lunch = new Lunch(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
-        lunch.selectLunch(scanner);
+        Meal meal = new Meal(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
+        meal.selectMeal(scanner);
 
 
-        lunch = new Lunch(inventory);
-        lunch.selectLunch(scanner);
+        meal = new Meal(inventory);
+        meal.selectMeal(scanner);
 
 //        System.out.println(potatoes.getFoodItemOverview());
 //        inventory.printInventory();

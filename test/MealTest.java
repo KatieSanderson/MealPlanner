@@ -3,9 +3,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class LunchTest {
+public class MealTest {
 
-    private Lunch lunch;
+    private Meal meal;
 
     @Before
     public void setUp() throws Exception {
@@ -27,12 +27,12 @@ public class LunchTest {
         inventory.addToInventory(beef);
         inventory.addToInventory(pork);
         inventory.addToInventory(tofu);
-        lunch = new Lunch(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
+        meal = new Meal(inventory, Arrays.asList(FoodType.MAIN, FoodType.STARCH, FoodType.STARCH, FoodType.STARCH));
     }
 
     @Test
     public void selectLunch() {
-//        Assert.assertEquals(lunch.selectedLunch, );
+//        Assert.assertEquals(meal.selectedLunch, );
     }
 
 }
