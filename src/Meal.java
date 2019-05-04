@@ -30,7 +30,26 @@ public class Meal {
         }
     }
 
-
+    void selectMealWithKeepSet(Scanner scanner, Set<FoodItem> keepSet) {
+        while (true) {
+            List<FoodItem> nextSelectedMeal = new ArrayList<>();
+            for (FoodItem foodItem : selectedMeal) {
+                if (keepSet.contains(foodItem)) {
+                    keepSet.remove(foodItem);
+                    nextSelectedMeal.add(foodItem);
+                } else {
+                    Optional<FoodItem> addedFoodItem = inventory.selectFoodItem(foodItem.getFoodType());
+                    while (addedFoodItem.get() == foodItem) {
+                        addedFoodItem = inventory.selectFoodItem(foodItem.getFoodType());
+                    }
+                    addedFoodItem.ifPresent(selectedMeal::add);
+                }
+            }
+            printMeal();
+            MealResponse response = getUserInput(scanner);
+            response.execute(this, scanner);
+        }
+    }
 
     private void printMeal(List<FoodItem> meal) {
         StringBuilder sb = new StringBuilder();
@@ -60,24 +79,38 @@ public class Meal {
                 meal.selectedMeal.clear();
             }
         },
-//        MODIFY(3, "Modify the current meal; will re-make keeping items indicated in this prompt") {
-//            @Override
-//            public void execute(Meal meal, Scanner scanner) {
-//                // User input for modifications of "Keep X, Y, Z"
-//                System.out.println("What items would you like to keep? These will be in the next meal \n" +
-//                        "Input should be comma separated \"" +
-//                        meal.selectedMeal.get(0).getName() + ", " +
-//                        meal.selectedMeal.get(meal.selectedMeal.size() - 1).getName() + "\" for example");
-//                Set<String> keepSet = Set.of(scanner.nextLine().split(",\\w+"));
-//                for (String keepItem : keepItems) {
-//                    for (FoodItem foodItem : meal.selectedMeal) {
-//                        if (foodItem.equals(keepItem)) {
-//
-//                        }
-//                    }
-//                }
-//            }
-//        },
+        MODIFY(3, "Modify the current meal; will re-make meal keeping items indicated in prompt") {
+            @Override
+            public void execute(Meal meal, Scanner scanner) {
+                // User input for modifications of "Keep X, Y, Z"
+                System.out.println("What items would you like to keep? These will be in the next meal \n" +
+                        "Input should be comma separated \"" +
+                        meal.selectedMeal.get(0).getName() + ", " +
+                        meal.selectedMeal.get(meal.selectedMeal.size() - 1).getName() + "\" for example");
+                Set<String> keepSet = Set.of(scanner.nextLine().split(",\\w+"));
+                Set<FoodItem> keepSetFromMeal = populateFoodItemsIfPresent(meal, keepSet);
+
+            }
+
+            private Set<FoodItem> populateFoodItemsIfPresent(Meal meal, Set<String> keepSet) {
+                Set<FoodItem> keepSetFromMeal = new HashSet<>();
+                for (String keepItem : keepSet) {
+                    Optional<FoodItem> keptFoodItem = isItemFound(meal, keepItem);
+                    keptFoodItem.ifPresent(keepSetFromMeal::add);
+                }
+                return keepSetFromMeal;
+            }
+
+            private Optional<FoodItem> isItemFound(Meal meal, String keepItem) {
+                for (FoodItem foodItem : meal.selectedMeal) {
+                    if (foodItem.equals(keepItem)) {
+                        return Optional.of(foodItem);
+                    }
+                }
+                System.out.println(keepItem + " is not in the selected meal.");
+                return Optional.empty();
+            }
+        },
         EXIT(4, "Exit program") {
             @Override
             public void execute(Meal meal, Scanner scanner) {}
@@ -96,7 +129,6 @@ public class Meal {
         }
 
         MealResponse(int code, String description) {
-            //TODO add a function to carry out the action
             this.code = code;
             this.description = description;
         }
@@ -126,9 +158,5 @@ public class Meal {
                 System.out.println("Invalid input. Please select from indicated options.");
             }
         }
-    }
-
-    private void clearMeal() {
-        selectedMeal.clear();
     }
 }
